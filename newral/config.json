@@ -1,0 +1,10 @@
+{
+    "max_len": 100,
+    "tokenizer": "newral/tokenizer.pickle",
+
+    "model_categorical": "newral/model_categorical",
+    "model_categorical_save_path": "newral/best_model_categorical.h5",
+
+    "model_binary": "newral/model_binary",
+    "model_binary_save_path": "newral/best_model_binary.h5"
+}

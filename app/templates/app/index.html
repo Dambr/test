@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Оценка отзыва</title>
+        <style>
+            *{
+                font-family:Arial, Helvetica, sans-serif;
+            }
+            table{
+                text-align: center;
+            }
+            td{
+                padding: 10px;
+            }
+            #text{
+                border-radius: 5px;
+                border-width: 7px;
+                padding: 10px;
+                border-color:forestgreen;
+            }
+            button{
+                width: 100px;
+                height: 30px;
+            }
+        </style>
+    </head>
+    <body>
+        <center>
+            <p><b>Введите ваш отзыв:</b></p>
+            <p><textarea id="text" rows="10" cols="45" name="text"></textarea></p>
+            <button onclick="sendData(window.location.href)">Rate</button>
+            <table>
+                <tr>
+                    <td></td>
+                    <td>Binary classifier</td>
+                    <td>Categorical classifier</td>
+                </tr>
+                <tr>
+                    <td>Number of stars</td>
+                    <td id="Grade_binary"></td>
+                    <td id="Grade_categorical"></td>
+                </tr>
+                <tr>
+                    <td>Tonality</td>
+                    <td id="Tonality_binary"></td>
+                    <td id="Tonality_categorical"></td>
+                </tr>
+            </table>
+        </center>
+        {% csrf_token %}
+        <script>
+            async function sendData(url) {
+                let el = document.getElementsByName("csrfmiddlewaretoken");
+                let csrf_value = el[0].getAttribute("value");
+                const response = await fetch(url, {
+                    method: 'POST',
+                    body: JSON.stringify({
+                        "data": document.getElementById("text").value
+                    }),
+                    credentials: 'include',
+                    headers: {
+                        'X-CSRFToken': csrf_value,
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const result = await response.json();
+                document.getElementById("Grade_binary").textContent = result.Grade_binary;
+                document.getElementById("Grade_categorical").textContent = result.Grade_categorical;
+                document.getElementById("Tonality_binary").textContent = result.Tonality_binary;
+                document.getElementById("Tonality_categorical").textContent = result.Tonality_categorical;
+
+                result.Tonality_binary == "Positive" 
+                ? document.getElementById("Tonality_binary").style.color = "green"
+                : document.getElementById("Tonality_binary").style.color = "red";
+
+                result.Tonality_categorical == 'Positive'
+                ? document.getElementById("Tonality_categorical").style.color = "green"
+                : document.getElementById("Tonality_categorical").style.color = "red";
+                console.log(result);
+            }
+        </script>
+    </body>
+</html>
