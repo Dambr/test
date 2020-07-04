@@ -4,8 +4,9 @@ import json
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from tensorflow import keras
-from tensorflow.keras.preprocessing.sequence import pad_sequences
+import keras
+# from tensorflow import keras
+from keras.preprocessing.sequence import pad_sequences
 import pickle
 
 # Загрузка конфигурационного файла
